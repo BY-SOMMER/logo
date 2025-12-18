@@ -1,0 +1,227 @@
+<!-- BYSOMMER info link + popup (copy/paste) -->
+<style>
+  /* Container for link and popup */
+  .BYSOMMER-link { display: inline-block; text-decoration: none; color: inherit; }
+  .BYSOMMER-popup {
+    position: absolute;
+    width: 200px;
+    height: 150px;
+    background: #2f2f2f; /* dark grey */
+    color: #ffffff;
+    font-family: "Avenir Next", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 10px;
+    border-radius: 4px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    padding: 10px;
+    box-sizing: border-box;
+    z-index: 9999;
+    display: none;
+  }
+
+  .BYSOMMER-popup .title {
+    font-weight: 600;
+    font-size: 11px;
+    margin-bottom: 4px;
+    line-height: 1;
+  }
+  .BYSOMMER-popup .desc {
+    font-weight: 400;
+    opacity: 0.95;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  /* Icon row */
+  .BYSOMMER-icons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .BYSOMMER-icon {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    color: #fff;
+    background: transparent;
+    transition: transform 180ms ease;
+    outline: none;
+    border: none;
+    padding: 0;
+  }
+
+  /* Hover circle animation using pseudo-element */
+  .BYSOMMER-icon::after {
+    content: "";
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    transform: scale(0.6);
+    opacity: 0;
+    transition: transform 220ms cubic-bezier(.2,.9,.2,1), opacity 220ms;
+    pointer-events: none;
+  }
+
+  .BYSOMMER-icon:hover,
+  .BYSOMMER-icon:focus {
+    transform: translateY(-2px);
+  }
+  .BYSOMMER-icon:hover::after,
+  .BYSOMMER-icon:focus::after {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* SVG icon styling */
+  .BYSOMMER-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Small accessible focus ring */
+  .BYSOMMER-icon:focus {
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+  }
+
+  /* Position helper: popup appears below the link by default */
+  .BYSOMMER-popup[data-position="bottom"] { transform-origin: top left; }
+  .BYSOMMER-popup[data-position="top"] { transform-origin: bottom left; }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .BYSOMMER-icon, .BYSOMMER-icon::after { transition: none; transform: none; opacity: 1; }
+  }
+</style>
+
+<!-- Link that toggles the popup -->
+<a href="#" class="BYSOMMER-link" id="BYSOMMER-toggle" aria-haspopup="true" aria-expanded="false">
+  BY SOMMER
+</a>
+
+<!-- Popup element (initially hidden) -->
+<div id="BYSOMMER-popup" class="BYSOMMER-popup" role="dialog" aria-hidden="true" aria-labelledby="BYSOMMER-title" data-position="bottom">
+  <div class="title" id="BYSOMMER-title">BY SOMMER</div>
+  <div class="desc">Innovative frontier bridging machine learning and strategic design thinking. Harness advanced AI systems as catalysts for systemic change, ethical & creative solution.</div>
+  <div class="BYSOMMER-icons" role="toolbar" aria-label="Company actions">
+    <!-- Contact (email) -->
+    <button class="BYSOMMER-icon" title="Contact" aria-label="Contact via email" onclick="window.location.href='mailto:i@bysommer.net'">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5v9A2.5 2.5 0 0 0 5.5 19h13A2.5 2.5 0 0 0 21 16.5v-9A2.5 2.5 0 0 0 18.5 5h-13A2.5 2.5 0 0 0 3 7.5z"/><path d="M21 7.5l-9 6-9-6"/></svg>
+    </button>
+
+    <!-- Website -->
+    <button class="BYSOMMER-icon" title="Website" aria-label="Open website" onclick="window.open('https://bysommer.net','_bysnet')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2c2.5 3.5 2.5 16 0 20M12 2C9.5 5.5 9.5 18.5 12 22"/></svg>
+    </button>
+
+    <!-- Add contact -->
+    <button class="BYSOMMER-icon" title="Add contact" aria-label="Add contact" onclick="BYSOMMERAddContact()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/><path d="M2 20c0-3.31 4.03-6 9-6s9 2.69 9 6"/><path d="M8 7v4M10 9H6"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const toggle = document.getElementById('BYSOMMER-toggle');
+    const popup = document.getElementById('BYSOMMER-popup');
+
+    // Position popup relative to toggle
+    function positionPopup() {
+      const rect = toggle.getBoundingClientRect();
+      const docEl = document.documentElement;
+      const top = rect.bottom + window.scrollY + 8; // 8px gap
+      const left = rect.left + window.scrollX;
+      popup.style.top = top + 'px';
+      popup.style.left = left + 'px';
+      popup.style.display = 'block';
+    }
+
+    function openPopup() {
+      positionPopup();
+      popup.setAttribute('aria-hidden','false');
+      toggle.setAttribute('aria-expanded','true');
+      // small show animation
+      popup.style.opacity = '0';
+      popup.style.transform = 'translateY(6px)';
+      requestAnimationFrame(()=> {
+        popup.style.transition = 'opacity 180ms ease, transform 180ms ease';
+        popup.style.opacity = '1';
+        popup.style.transform = 'translateY(0)';
+      });
+      // focus first icon for keyboard users
+      const firstIcon = popup.querySelector('.BYSOMMER-icon');
+      if (firstIcon) firstIcon.focus();
+    }
+
+    function closePopup() {
+      popup.setAttribute('aria-hidden','true');
+      toggle.setAttribute('aria-expanded','false');
+      popup.style.transition = 'opacity 120ms ease, transform 120ms ease';
+      popup.style.opacity = '0';
+      popup.style.transform = 'translateY(6px)';
+      setTimeout(()=> { popup.style.display = 'none'; }, 160);
+    }
+
+    toggle.addEventListener('click', function(e){
+      e.preventDefault();
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) closePopup(); else openPopup();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') {
+        if (toggle.getAttribute('aria-expanded') === 'true') {
+          closePopup();
+          toggle.focus();
+        }
+      }
+    });
+
+    // Click outside to close
+    document.addEventListener('click', function(e){
+      if (!popup.contains(e.target) && !toggle.contains(e.target)) {
+        if (toggle.getAttribute('aria-expanded') === 'true') closePopup();
+      }
+    });
+
+    // Simple add contact fallback (attempt vCard download)
+    window.BYSOMMERAddContact = function() {
+      const vcard = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'FN:BY SOMMER',
+        'ORG:BY SOMMER',
+        'EMAIL:i@bysommer.net',
+        'URL:https://bysommer.net',
+        'END:VCARD'
+      ].join('\n');
+      const blob = new Blob([vcard], { type: 'text/vcard' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'BYSOMMER.vcf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=> URL.revokeObjectURL(url), 5000);
+    };
+
+    // Reposition on resize/scroll if open
+    window.addEventListener('resize', function(){ if (toggle.getAttribute('aria-expanded')==='true') positionPopup(); });
+    window.addEventListener('scroll', function(){ if (toggle.getAttribute('aria-expanded')==='true') positionPopup(); }, { passive: true });
+
+  })();
+</script>
